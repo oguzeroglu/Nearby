@@ -1,5 +1,5 @@
-var Nearby = function (minX, minY, minZ, maxX, maxY, maxZ, binSize){
-  this.limitBox = this.createBox(minX, minY, minZ, maxX, maxY, maxZ);
+var Nearby = function (width, height, depth, binSize){
+  this.limitBox = this.createBox(0, 0, 0, width, height, depth);
   this.binSize = binSize;
 
   this.bin = new Map();
@@ -7,14 +7,29 @@ var Nearby = function (minX, minY, minZ, maxX, maxY, maxZ, binSize){
   this.reusableResultMap = new Map();
 }
 
-Nearby.prototype.createBox = function(minX, minY, minZ, maxX, maxY, maxZ){
-  var bb = {minX: minX, minY: minY, minZ: minZ, maxX: maxX, maxY: maxY, maxZ: maxZ};
+Nearby.prototype.createBox = function(x, y, z, width, height, depth){
+  var bb = {};
 
   bb.containsBox = function(box){
     return this.minX <= box.minX && box.maxX <= this.maxX &&
             this.minY <= box.minY && box.maxY <= this.maxY &&
               this.minZ <= box.minZ && box.maxZ <= this.maxZ;
   };
+
+  bb.setFromCenterAndSize = function(x, y, z, width, height, depth){
+    var halfWidth = width / 2;
+    var halfHeight = height / 2;
+    var halfDepth = depth / 2;
+
+    this.minX = x - halfWidth;
+    this.maxX = x + halfWidth;
+    this.minY = y - halfHeight;
+    this.maxY = y + halfHeight;
+    this.minZ = z - halfDepth;
+    this.maxZ = z + halfDepth;
+  };
+
+  bb.setFromCenterAndSize(x, y, z, width, height, depth);
 
   return bb;
 }
@@ -224,13 +239,8 @@ Nearby.prototype.delete = function(obj){
   }
 }
 
-Nearby.prototype.update = function(obj, minX, minY, minZ, maxX, maxY, maxZ){
-  obj.box.minX = minX;
-  obj.box.minY = minY;
-  obj.box.minZ = minZ;
-  obj.box.maxX = minX;
-  obj.box.maxY = minY;
-  obj.box.maxZ = minZ;
+Nearby.prototype.update = function(obj, x, y, z, width, height, depth){
+  obj.box.setFromCenterAndSize(x, y, z, width, height, depth);
 
   this.delete(obj);
   this.insert(obj);

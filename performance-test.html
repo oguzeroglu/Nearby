@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <title> Nearby performance test </title>
+    <script src="./Nearby.js"></script>
+  </head>
+
+  <body>
+    See the console for output.
+
+    <script type="text/javascript">
+
+      function boxDistanceToOrigin(box){
+        var boxX = (box.minX + box.maxX) / 2;
+        var boxY = (box.minY + box.maxY) / 2;
+        var boxZ = (box.minZ + box.maxZ) / 2;
+
+        return (Math.sqrt((boxX * boxX) + (boxY * boxY) + (boxZ * boxZ)));
+      }
+
+      function getRandomFloat(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+
+      var test = function(num){
+
+        console.log("_________________________________________");
+        console.log("Test size: " + num);
+        console.log("Creating objects.");
+
+        var min = -1000, max = 1000;
+        var boxSize = 50;
+
+        var nearby = new Nearby(max, max, max, 50);
+
+        var objects = [];
+
+        for (var i = 0; i < num; i ++){
+          var box = nearby.createBox(
+            getRandomFloat(min, max), getRandomFloat(min, max), getRandomFloat(min, max),
+            boxSize, boxSize, boxSize
+          );
+
+          var obj = nearby.createObject("obj_" + i, box);
+          nearby.insert(obj);
+
+          objects.push(obj);
+        }
+
+        console.log("Testing with Nearby");
+        var startTime = performance.now();
+        var res = nearby.query(0, 0, 0);
+        var minFound = null, minDistance = null;
+        for (var obj of res.keys()){
+          var box = obj.box;
+          var dist = boxDistanceToOrigin(box);
+          if (dist <= minDistance || minFound == null){
+            minFound = obj.id;
+            minDistance = dist;
+          }
+        }
+        var timeTook = performance.now() - startTime;
+        console.log("[With Nearby]: Closest object is: " + minFound + ". Time took: " + timeTook + " ms.");
+
+        // Testing bruteforce
+        console.log("Testing with Bruteforce");
+        var startTime = performance.now();
+        var minFound = null, minDistance = null;
+        for (i = 0; i < objects.length; i++){
+          var box = objects[i].box;
+          var dist = boxDistanceToOrigin(box);
+          if (dist <= minDistance || minFound == null){
+            minFound = objects[i].id;
+            minDistance = dist;
+          }
+        }
+        var timeTook = performance.now() - startTime;
+        console.log("[With Bruteforce]: Closest object is: " + minFound + ". Time took: " + timeTook + " ms.");
+
+        console.log("_________________________________________");
+      }
+
+      test(1000000);
+    </script>
+  </body>
+</html>
