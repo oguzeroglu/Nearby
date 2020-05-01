@@ -14,7 +14,7 @@ This naive approach runs on `O(n)` and this is a problem especially for rather c
 In order to overcome this problem, game engines use [Octree](https://en.wikipedia.org/wiki/Octree) data structure. However Octree is not so easy to implement for dynamic objects. A tree needs to be reconstructed in that case, which triggers GC activity and slows down the main thread in Javascript.
 # The Solution
 
-While working on [ROYGBIV engine](https://github.com/oguzeroglu/ROYGBIV) particle collisions, I experimented with couple of solutions and ended up implemented a binning algorithm that splits the world into bins, insert the object into different bins based on their bounding boxes. This helps us finding nearby objects of a given point in constant time `O(1)`. This library is a standalone version of the same algorithm.
+While working on [ROYGBIV engine](https://github.com/oguzeroglu/ROYGBIV) particle collisions, I experimented with couple of solutions and ended up implementing a binning algorithm that splits the world into bins, insert the object into different bins based on their bounding boxes. This helps us finding nearby objects of a given point in constant time `O(1)`. This library is a standalone version of the same algorithm.
 # Performance Comparison
 Run the [performance-test](https://github.com/oguzeroglu/Nearby/blob/master/performance-test.html) in your browser. In order to test the efficiency of Nearby, a defined amount of objects are created and put into random positions. Then the closest object to the point `(0, 0, 0)` is search first with Nearby algorithm and then with the naive approach (brute forcing).
 
