@@ -76,7 +76,7 @@ var searchX = 0, searchY = 0, searchZ = 0;
 // returns a Map having keys: inserted objects
 var result = nearby.query(searchX, searchY, searchZ);
 
-for (var object of result){
+for (var object of result.keys()){
 	console.log(object.id + " is found nearby!");
 }
 ```
