@@ -245,3 +245,5 @@ Nearby.prototype.update = function(obj, x, y, z, width, height, depth){
   this.delete(obj);
   this.insert(obj);
 }
+
+export default Nearby;
