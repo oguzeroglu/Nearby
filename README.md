@@ -29,11 +29,21 @@ As you can see Nearby offers a much faster solution.
 
 # Usage
 
-Include the Nearby.js in your HTML
+Get the latest release. Include the Nearby.min.js in your HTML
 ```HTML
 <head>
-	<script src="[Path to Nearby.js]"></script>
+	<script src="[Path to Nearby.min.js]"></script>
 
+```
+
+For NodeJS:
+
+```
+npm install --save nearby-js
+```
+
+```Javascript
+var Nearby = require("nearby-js");
 ```
 
 Then with Javascript:
