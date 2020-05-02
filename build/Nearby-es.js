@@ -1,9 +1,3 @@
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global.Nearby = factory());
-}(this, (function () { 'use strict';
-
 var Nearby = function Nearby(width, height, depth, binSize) {
   this.limitBox = this.createBox(0, 0, 0, width, height, depth);
   this.binSize = binSize;
@@ -353,7 +347,4 @@ Nearby.prototype.update = function (obj, x, y, z, width, height, depth) {
   this.insert(obj);
 };
 
-return Nearby;
-
-})));
-//# sourceMappingURL=Nearby.mjs.map
+export default Nearby;

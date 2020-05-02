@@ -23,13 +23,16 @@ export default {
     {
       dest: pkg.main,
       format: 'umd',
-      moduleName: 'Nearby',
-      sourceMap: true
+      moduleName: 'Nearby'
     },
     {
       dest: pkg.module,
-      format: 'umd',
-      sourceMap: true,
+      format: 'cjs',
+      moduleName: "Nearby"
+    },
+    {
+      dest: pkg.es,
+      format: 'es',
       moduleName: "Nearby"
     }
   ]

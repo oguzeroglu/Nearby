@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Find nearby 3D objects in constant time O(1).",
   "main": "build/Nearby.js",
-  "module": "build/Nearby.mjs",
+  "module": "build/Nearby-module.js",
+  "es": "build/Nearby-es.js",
   "directories": {
     "test": "test"
   },
