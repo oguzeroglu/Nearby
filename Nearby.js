@@ -131,25 +131,25 @@ Nearby.prototype.insert = function(obj){
   }
 
   for (var x = minXLower; x<= maxXLower; x+= BIN_SIZE){
+    if (!this.bin.has(x)){
+      this.bin.set(x, new Map());
+    }
+    if (!obj.binInfo.has(x)){
+      obj.binInfo.set(x, new Map());
+    }
     for (var y = minYLower; y<= maxYLower; y+= BIN_SIZE){
+      if (!this.bin.get(x).has(y)){
+        this.bin.get(x).set(y, new Map());
+      }
+      if (!obj.binInfo.get(x).has(y)){
+        obj.binInfo.get(x).set(y, new Map());
+      }
       for (var z = minZLower; z <= maxZLower; z+= BIN_SIZE){
-        if (!this.bin.has(x)){
-          this.bin.set(x, new Map());
-        }
-        if (!this.bin.get(x).has(y)){
-          this.bin.get(x).set(y, new Map());
-        }
         if (!this.bin.get(x).get(y).has(z)){
           this.bin.get(x).get(y).set(z, new Map());
         }
         this.bin.get(x).get(y).get(z).set(obj, true);
 
-        if (!obj.binInfo.has(x)){
-          obj.binInfo.set(x, new Map());
-        }
-        if (!obj.binInfo.get(x).has(y)){
-          obj.binInfo.get(x).set(y, new Map());
-        }
         obj.binInfo.get(x).get(y).set(z, true);
       }
     }
@@ -192,17 +192,17 @@ Nearby.prototype.query = function(x, y, z){
   result.clear();
 
   for (var xDiff = -BIN_SIZE; xDiff <= BIN_SIZE; xDiff += BIN_SIZE){
+    var keyX = (minX + xDiff);
     for (var yDiff = -BIN_SIZE; yDiff <= BIN_SIZE; yDiff += BIN_SIZE){
+      var keyY = (minY + yDiff);
       for (var zDiff = -BIN_SIZE; zDiff <= BIN_SIZE; zDiff += BIN_SIZE){
-        var keyX = (minX + xDiff);
-        var keyY = (minY + yDiff);
         var keyZ = (minZ + zDiff);
         if (this.bin.has(keyX) && this.bin.get(keyX).has(keyY)){
           var res = this.bin.get(keyX).get(keyY).get(keyZ);
-          if (res){
-            for (var obj of res.keys()){
-              result.set(obj, true);
-            }
+          if (!res) continue;
+          
+          for (var obj of res.keys()){
+            result.set(obj, true);
           }
         }
       }
